@@ -1,9 +1,17 @@
 <!DOCTYPE html>
 <body>
+<div id="app"></div>
 <script type="text/javascript" src="/lib/preact.umd.min.js"></script>
 <script type="text/javascript" src="/lib/preact-hooks.umd.min.js"></script>
 <script type="text/javascript" src="/lib/preact-compat.umd.min.js"></script>
 <script type="text/javascript" src="/lib/preact-devtools.umd.js"></script>
 <script type="text/javascript" src="/lib/preact-debug.umd.js"></script>
 
+<script type="text/javascript" src="/dist/datagrid.js"></script>
+
+<script>
+	window.addEventListener('DOMContentLoaded', function() {
+		preact.render(preact.h(Datagrid), document.getElementById('app'));
+	});
+</script>
 </body>
