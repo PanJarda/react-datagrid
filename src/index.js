@@ -43,9 +43,7 @@ RestaurantsRestCollection.prototype.render = function() {
 function App(props) {
 	Component.call(this, props);
 }
-
 App.prototype = Object.create(Component.prototype);
-
 App.prototype.constructor = App;
 
 App.prototype.render = function() {
