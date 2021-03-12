@@ -13,6 +13,7 @@
     "prettify": "prettier --write ./src",
     "lint": "eslint ./src --ext .js",
     "build": "rollup -c",
-    "build:prod": "NODE_ENV=production rollup -c"
+    "build:prod": "NODE_ENV=production rollup -c",
+    "serve": "python2 -m SimpleHTTPServer"
   }
 }
