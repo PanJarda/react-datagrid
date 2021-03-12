@@ -63,7 +63,8 @@ App.prototype.render = function() {
 					label: 'Adresa',
 					filter: AddressFilter
 				}
-			}
+			},
+			orderBy: 'name'
 		})
 	);
 };
