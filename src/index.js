@@ -4,8 +4,12 @@ import { TextFilter, AddressFilter } from './Filters';
 import RestCollection from './RestCollection';
 import Server from './Server';
 
-var server = new Server({
-	restaurants: { url: '/api/restaurants', method: 'GET' }
+var server = new Server('/api', {
+	restaurants: {
+		url: '/restaurants',
+		method: 'GET',
+		responseType: 'json'
+	}
 });
 
 function RestaurantsRow(props) {

@@ -1,4 +1,9 @@
-export default function Server(baseUrl, endpoints) {
+/**
+ * @constructor
+ * @param {string} baseUrl 
+ * @param {Object} endpoints 
+ */
+function Server(baseUrl, endpoints) {
 	this.baseUrl = baseUrl;
 	this.endpoints = endpoints;
 }
@@ -64,3 +69,5 @@ Server.prototype.send = function (props) {
 Server.prototype.cancel = function (xhr) {
 	xhr.abort();
 };
+
+export default Server;
