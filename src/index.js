@@ -1,15 +1,73 @@
 import { h, Component } from 'preact';
+import Datagrid from './Datagrid';
+import { TextFilter, AddressFilter } from './Filters';
+import RestCollection from './RestCollection';
+import Server from './Server';
 
-function Datagrid(props) {
+var server = new Server({
+	restaurants: { url: '/api/restaurants', method: 'GET' }
+});
+
+function RestaurantsRow(props) {
+	Component.call(this, props);
+}
+RestaurantsRow.prototype = Object.create(Component.prototype);
+RestaurantsRow.prototype.constructor = RestaurantsRow;
+
+RestaurantsRow.prototype.render = function() {
+	return (
+		h('tr', null, [
+			h('td', null, props.name),
+			h('td', null, props.slug),
+			h('td', null, props.address.street)
+		])
+	);
+};
+
+function RestaurantsRestCollection(props) {
+	Component.call(this, props);
+}
+RestaurantsRestCollection.prototype = Object.create(Component.prototype);
+RestaurantsRestCollection.prototype.constructor = RestaurantsRestCollection;
+
+RestaurantsRestCollection.prototype.render = function() {
+	return h(RestCollection, {
+		server: server,
+		endpoint: 'restaurants',
+		itemComponent: RestaurantsRow,
+		query: this.props.query
+	});
+}
+
+
+function App(props) {
 	Component.call(this, props);
 }
 
-Datagrid.prototype = Object.create(Component.prototype);
+App.prototype = Object.create(Component.prototype);
 
-Datagrid.prototype.constructor = Datagrid;
+App.prototype.constructor = App;
 
-Datagrid.prototype.render = function() {
-	return h('div', null, 'ahoj');
+App.prototype.render = function() {
+	return (
+		h(Datagrid, {
+			collection: RestaurantsRestCollection,
+			columns: {
+				name: {
+					label: 'Jmeno',
+					filter: TextFilter
+				},
+				slug: {
+					label: 'slug',
+					filter: TextFilter
+				},
+				address: {
+					label: 'Adresa',
+					filter: AddressFilter
+				}
+			}
+		})
+	);
 };
 
-export default Datagrid;
+export default App;
