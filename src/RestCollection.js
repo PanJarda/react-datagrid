@@ -16,9 +16,7 @@ function RestCollection(props) {
 		cards: []
 	};
 }
-
 RestCollection.prototype = Object.create(PureComponent.prototype);
-
 RestCollection.prototype.constructor = RestCollection;
 
 RestCollection.prototype.collectCards = function (cards) {
