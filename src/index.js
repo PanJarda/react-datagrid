@@ -8,25 +8,25 @@ class Event {
   }
 
   renderHead(sortedBy, asc, sort, filter) {
-    return h('tr', null,
-      h('th', null, '#'),
-      h('th', null,
-        h('span', {onClick: () => sort('name')}, 'Jméno' + (sortedBy === 'name' ? asc ? ' ^' : ' v' : '' )),
-        h('input', {onChange: e => filter('name', e.target.value)})
-      ),
-      h('th',null,
-        h('span', {onClick: () => sort('slug')}, 'Slug' + (sortedBy === 'slug' ? asc ? ' ^' : ' v' : '' )),
-        h('input', {onChange: e => filter('slug', e.target.value)})
-      )
-    );
+    return <tr>
+      <th>#</th>
+      <th>
+        <span onClick={() => sort('name')}>{ 'Jméno' + (sortedBy === 'name' ? asc ? ' ^' : ' v' : '' ) }</span>
+        <input onChange={ e => filter('name', e.target.value) } />
+      </th>
+      <th>
+        <span onClick={() => sort('slug')}>{ 'Slug' + (sortedBy === 'slug' ? asc ? ' ^' : ' v' : '' ) }</span>
+        <input onChange={  e => filter('slug', e.target.value) } />
+      </th>
+    </tr>;
   }
 
   renderRow(i) {
-    return h('tr', null,
-      h('td', null, i),
-      h('td', null, this.name),
-      h('td', null, this.slug)
-    );
+    return <tr>
+      <td>{ i }</td>
+      <td>{ this.name }</td>
+      <td>{ this.slug }</td>
+    </tr>
   }
 }
 
@@ -36,10 +36,10 @@ class Table extends Component {
   }
 
   render() {
-    return h('table', null,
-      h('thead', null, this.props.head),
-      h('tbody', null, this.props.body)
-    );
+    return <table>
+      <thead>{ this.props.head }</thead>
+      <tbody>{ this.props.body }</tbody>
+    </table>;
   }
 }
 
@@ -50,12 +50,12 @@ class App extends Component {
 
   render() {
     return (
-      h(Datagrid, {
-        collection: new RestCollection('https://ventip.infotrh.cz/api/events', Event),
-        container: Table,
-        button: 'button',
-        limit: 10
-      })
+      <Datagrid
+        collection={new RestCollection('https://ventip.infotrh.cz/api/events', Event)}
+        container={Table}
+        button={'button'}
+        limit={10}
+      />
     );
   }
 }

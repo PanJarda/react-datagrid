@@ -1,4 +1,5 @@
 import { terser } from 'rollup-plugin-terser';
+import babel from '@rollup/plugin-babel';
 
 var isProduction = process.env.NODE_ENV === 'production';
 
@@ -20,5 +21,11 @@ export default {
 		'preact/hooks',
 		'preact/compat',
 	],
-	plugins: [isProduction && terser()]
+	plugins: [
+		babel({
+			babelHelpers: 'bundled',
+			extensions: ['.js', '.jsx']
+		}),
+		isProduction && terser()
+	]
 };

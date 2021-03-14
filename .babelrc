@@ -1,0 +1,24 @@
+{
+	"presets": [
+		[
+			"@babel/env",
+			{
+				"useBuiltIns": false,
+				"targets": {
+					"esmodules": true
+				},
+				"exclude": [
+					"@babel/plugin-transform-typeof-symbol"
+				],
+				"modules": "auto"
+			}
+		]
+	],
+	"plugins": [
+		["@babel/plugin-transform-react-jsx", {
+			"pragma":"h",
+			"pragmaFrag": "Fragment"
+			}]
+	],
+	"sourceType": "unambiguous"
+}
