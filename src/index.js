@@ -50,10 +50,6 @@ class Table extends Component {
 }
 
 class App extends Component {
-  constructor() {
-    super()
-  }
-
   render() {
     return (
       <Datagrid
