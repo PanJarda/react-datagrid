@@ -41,7 +41,7 @@ Datagrid.prototype.fetchRows = function() {
 				this.state.asc ? 'ASC' : 'DESC'
 			),
 			state.filters
-		),			
+		),
 		state.offset,
 		state.offset + this.props.limit
 	)).as(

@@ -12,7 +12,10 @@ Event.prototype.renderHead = function(sortedBy, asc, sort, filter) {
 			h('span', {onClick: () => sort('name')}, 'Jméno' + (sortedBy === 'name' ? asc ? ' ^' : ' v' : '' )),
 			h('input', {onChange: e => filter('name', e.target.value)})
 		),
-		h('th', {onClick: () => sort('slug')}, 'Slug' + (sortedBy === 'slug' ? asc ? ' ^' : ' v' : '' ))
+		h('th',null,
+			h('span', {onClick: () => sort('slug')}, 'Slug' + (sortedBy === 'slug' ? asc ? ' ^' : ' v' : '' )),
+			h('input', {onChange: e => filter('slug', e.target.value)})
+		)
 	);
 }
 
