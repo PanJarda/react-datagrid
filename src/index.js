@@ -1,48 +1,35 @@
 import { h, Component } from 'preact';
 import Datagrid from './Datagrid';
-import { TextFilter, AddressFilter } from './Filters';
-import RestCollection from './RestCollection';
-import Server from './Server';
+import { RestCollection } from './RestCollection';
 
-var server = new Server('/api', {
-	restaurants: {
-		url: '/restaurants',
-		method: 'GET',
-		responseType: 'json'
-	}
-});
-
-function RestaurantsRow(props) {
+function Apple(props) {
 	Component.call(this, props);
 }
-RestaurantsRow.prototype = Object.create(Component.prototype);
-RestaurantsRow.prototype.constructor = RestaurantsRow;
 
-RestaurantsRow.prototype.render = function() {
-	return (
-		h('tr', null, [
-			h('td', null, props.name),
-			h('td', null, props.slug),
-			h('td', null, props.address.street)
-		])
+Apple.prototype = Object.create(Component.prototype);
+Apple.prototype.constructor = Apple;
+
+Apple.prototype.renderHead = function() {
+	return h('tr', null,
+		h('th', null, 'Jméno'),
+		h('th', null, 'Slug')
+	);
+}
+
+Apple.prototype.renderRow = function() {
+	var props = this.props;
+
+	return h('tr', null,
+		h('td', null, props.name),
+		h('td', null, props.slug)
 	);
 };
 
-function RestaurantsRestCollection(props) {
-	Component.call(this, props);
-}
-RestaurantsRestCollection.prototype = Object.create(Component.prototype);
-RestaurantsRestCollection.prototype.constructor = RestaurantsRestCollection;
+function AppleRow(props) {
+	return h(Apple, props);
+};
 
-RestaurantsRestCollection.prototype.render = function() {
-	return h(RestCollection, {
-		server: server,
-		endpoint: 'restaurants',
-		itemComponent: RestaurantsRow,
-		query: this.props.query
-	});
-}
-
+var apples = new RestCollection('https://ventip.infotrh.cz/api/events', Apple);
 
 function App(props) {
 	Component.call(this, props);
@@ -53,22 +40,8 @@ App.prototype.constructor = App;
 App.prototype.render = function() {
 	return (
 		h(Datagrid, {
-			collection: RestaurantsRestCollection,
-			columns: {
-				name: {
-					label: 'Jmeno',
-					filter: TextFilter
-				},
-				slug: {
-					label: 'slug',
-					filter: TextFilter
-				},
-				address: {
-					label: 'Adresa',
-					filter: AddressFilter
-				}
-			},
-			orderBy: 'name'
+			collection: apples,
+			limit: 10
 		})
 	);
 };

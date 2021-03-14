@@ -1,4 +1,30 @@
-function RestCollection(apiUrl, itemCtor) {
+export function AsyncCollection(itemCtor) {
+	this.itemCtor = itemCtor;
+	this.items = [];
+}
+
+AsyncCollection.prototype.add = function(item, success, failure, sender) {
+	// jakym zpusobem se bude serializovat item je na nem a ne na kolekci
+	this.items.push(item.serialize());
+};
+
+AsyncCollection.prototype.delete = function(item, success, failure, sender) {
+
+};
+
+AsyncCollection.prototype.as = function(ctor, success, failure, sender, opts) {
+	var proto = Object.create(ctor);
+	// sort filter offset
+	setTimeout(() => msg.call(sender, ctor.apply(proto, this.items.map(item => new this.itemCtor(item)))), 0);
+};
+
+AsyncCollection.prototype.size = function(msg, sender, opts) {
+	
+};
+
+/* Rest Collection */
+
+export function RestCollection(apiUrl, itemCtor) {
 	this.apiUrl = apiUrl;
 	this.itemCtor = itemCtor;
 }
@@ -42,7 +68,7 @@ RestCollection.prototype.as = function(ctor, msg, sender, opts) {
 		}
 
 		if (opts.limit !== undefined) {
-			query.set('limit', opts.limit);
+			query.set('l', opts.limit);
 		}
 
 		if (opts.offset !== undefined) {
@@ -58,11 +84,19 @@ RestCollection.prototype.as = function(ctor, msg, sender, opts) {
 	xhr.send();
 };
 
+RestCollection.prototype.size = function(msg, sender, opts) {
+	// TODO
+};
 
-function SortedCollection(origin, key) {
+
+export function SortedCollection(origin, key) {
 	this.origin = origin;
 	this.key = key;
 }
+
+SortedCollection.prototype.add = function(props, msg, sender) {
+	this.origin.add(props, msg, sender);
+};
 
 SortedCollection.prototype.as = function(ctor, msg, sender, opts) {
 	var opts = opts || {};
@@ -70,24 +104,40 @@ SortedCollection.prototype.as = function(ctor, msg, sender, opts) {
 	this.origin.as(ctor, msg, sender, opts);
 };
 
-function FilteredCollection(origin, key, value) {
+SortedCollection.prototype.size = function(msg, sender, opts) {
+
+};
+
+export function FilteredCollection(origin, key, value) {
 	this.origin = origin;
 	this.key = key;
 	this.value = value;
 }
 
+FilteredCollection.prototype.add = function(props, msg, sender) {
+	this.origin.add(props, msg, sender);
+};
+
 FilteredCollection.prototype.as = function(ctor, msg, sender, opts) {
 	var opts = opts || {};
 	opts.filter = opts.filter || {};
-	opts.filter[key] = value;
+	opts.filter[this.key] = this.value;
 	this.origin.as(ctor, msg, sender, opts);
 };
 
-function SubCollection(origin, start, end) {
+FilteredCollection.prototype.size = function(msg, sender, opts) {
+
+};
+
+export function SubCollection(origin, start, end) {
 	this.origin = origin;
 	this.start = start || 0;
 	this.end = end;
 }
+
+SubCollection.prototype.add = function(props, msg, sender) {
+	this.origin.add(props, msg, sender);
+};
 
 SubCollection.prototype.as = function(ctor, msg, sender, opts) {
 	var opts = opts || {};
@@ -96,14 +146,15 @@ SubCollection.prototype.as = function(ctor, msg, sender, opts) {
 	this.origin.as(ctor, msg, sender, opts);
 };
 
-function RestApple(props) {
-	Object.assign(this, props);
-}
+SubCollection.prototype.size = function(msg, sender, opts) {
 
+};
+
+/*
 var apples = new SubCollection(
 	new SortedCollection(
 		new FilteredCollection(
-			new RestCollection('/api/apples', RestApple),
+			new AsyncCollection(RestApple),
 			'color',
 			'red'
 		),
@@ -114,3 +165,11 @@ var apples = new SubCollection(
 );
 
 apples.as(Array, console.log, console);
+
+
+apples.filter('color', 'red')
+	.filter('size[gte]', 5)
+	.sort('size', 'asc')
+	.as(Array, console.log, console);
+
+apples.size(console.log, console);*/
