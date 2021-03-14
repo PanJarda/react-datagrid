@@ -171,3 +171,47 @@ apples.as(List, this, 'receiveResponse', {
 	},
 	sort: 'size'
 });
+
+//
+
+// nesting resources
+
+function Author(apiUrl, author) {
+	if (typeof author !== 'object') {
+		this.id = author;
+	} else {
+		this.id = author.id;
+		this.name = author.name;
+	}
+}
+
+Author.prototype.receiveName = function(request) {
+	this.name = request.name;
+}
+
+Author.prototype.getName = function(msg, sender) {
+	if (this.name) {
+		msg.call(sender, this.name);
+	} else {
+		new Request(apiUrl, name).call(getName)
+	}
+}
+
+Author.prototype.setName = function(msg, sender) {
+	
+}
+
+function Post(apiUrl, post, Author) {
+	this.author = new Author(apiUrl, post.author);
+	this.body = post.body;
+}
+
+posts = new RestCollection('/api/posts', Post);
+
+posts.find(this.iHavePost, this, '123');
+
+post.author.setName('Jarda');
+
+authors.find('name', 'jarda', jarda => console.log(jarda));
+
+posts.add(console.log, console, jarda, 'ahoj jak se maste');
