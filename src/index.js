@@ -8,25 +8,29 @@ class Event {
   }
 
   renderHead(sortedBy, asc, sort, filter) {
-    return <tr>
-      <th>#</th>
-      <th>
-        <span onClick={() => sort('name')}>{ 'Jméno' + (sortedBy === 'name' ? asc ? ' ^' : ' v' : '' ) }</span>
-        <input onChange={ e => filter('name', e.target.value) } />
-      </th>
-      <th>
-        <span onClick={() => sort('slug')}>{ 'Slug' + (sortedBy === 'slug' ? asc ? ' ^' : ' v' : '' ) }</span>
-        <input onChange={  e => filter('slug', e.target.value) } />
-      </th>
-    </tr>;
+    return (
+      <tr>
+        <th>#</th>
+        <th>
+          <span onClick={() => sort('name')}>{ 'Jméno' + (sortedBy === 'name' ? asc ? ' ^' : ' v' : '' ) }</span>
+          <input onChange={ e => filter('name', e.target.value) } />
+        </th>
+        <th>
+          <span onClick={() => sort('slug')}>{ 'Slug' + (sortedBy === 'slug' ? asc ? ' ^' : ' v' : '' ) }</span>
+          <input onChange={  e => filter('slug', e.target.value) } />
+        </th>
+      </tr>
+    );
   }
 
   renderRow(i) {
-    return <tr>
-      <td>{ i }</td>
-      <td>{ this.name }</td>
-      <td>{ this.slug }</td>
-    </tr>
+    return (
+      <tr>
+        <td>{ i }</td>
+        <td>{ this.name }</td>
+        <td>{ this.slug }</td>
+      </tr>
+    );
   }
 }
 
@@ -36,10 +40,12 @@ class Table extends Component {
   }
 
   render() {
-    return <table>
-      <thead>{ this.props.head }</thead>
-      <tbody>{ this.props.body }</tbody>
-    </table>;
+    return (
+      <table>
+        <thead>{ this.props.head }</thead>
+        <tbody>{ this.props.body }</tbody>
+      </table>
+    );
   }
 }
 
