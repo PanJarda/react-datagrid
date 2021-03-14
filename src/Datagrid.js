@@ -117,16 +117,16 @@ Datagrid.prototype.filter = function(col, value) {
 Datagrid.prototype.render = function() {
 	var count = this.state.rows.length;
 	return h('div', null,
-		h('table', null,
-			h('thead', null, count ? this.state.rows[0].renderHead(this.state.sortedBy, this.state.asc, this.sort, this.filter) : ''),
-			!this.state.loading
-				? h('tbody', null, this.state.rows.map((row, i) => row.renderRow(i + 1 + this.state.offset)))
+		h(this.props.wrap, {
+			head: count ? this.state.rows[0].renderHead(this.state.sortedBy, this.state.asc, this.sort, this.filter) : '',
+			body: !this.state.loading
+				? this.state.rows.map((row, i) => row.renderRow(i + 1 + this.state.offset))
 				: 'loading...'
-		),
+		}),
 		this.state.offset > 0
-			? h('button', {onClick: this.prev}, 'prev')
+			? h(this.props.button, {onClick: this.prev}, 'prev')
 			: '',
-		h('button', {onClick: this.next}, 'next')
+		h(this.props.button, {onClick: this.next}, 'next')
 	);
 };
 
