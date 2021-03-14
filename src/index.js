@@ -6,10 +6,13 @@ function Event(props) {
 	this.props = props;
 }
 
-Event.prototype.renderHead = function() {
+Event.prototype.renderHead = function(sortedBy, asc, sort, filter) {
 	return h('tr', null,
-		h('th', null, 'Jméno'),
-		h('th', null, 'Slug')
+		h('th', null,
+			h('span', {onClick: () => sort('name')}, 'Jméno' + (sortedBy === 'name' ? asc ? ' ^' : ' v' : '' )),
+			h('input', {onChange: e => filter('name', e.target.value)})
+		),
+		h('th', {onClick: () => sort('slug')}, 'Slug' + (sortedBy === 'slug' ? asc ? ' ^' : ' v' : '' ))
 	);
 }
 

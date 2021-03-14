@@ -89,9 +89,10 @@ RestCollection.prototype.size = function(msg, sender, opts) {
 };
 
 
-export function SortedCollection(origin, key) {
+export function SortedCollection(origin, key, order) {
 	this.origin = origin;
 	this.key = key;
+	this.order = order;
 }
 
 SortedCollection.prototype.add = function(props, msg, sender) {
@@ -108,10 +109,9 @@ SortedCollection.prototype.size = function(msg, sender, opts) {
 
 };
 
-export function FilteredCollection(origin, key, value) {
+export function FilteredCollection(origin, filters) {
 	this.origin = origin;
-	this.key = key;
-	this.value = value;
+	this.filters = filters;
 }
 
 FilteredCollection.prototype.add = function(props, msg, sender) {
@@ -121,7 +121,7 @@ FilteredCollection.prototype.add = function(props, msg, sender) {
 FilteredCollection.prototype.as = function(ctor, msg, sender, opts) {
 	var opts = opts || {};
 	opts.filter = opts.filter || {};
-	opts.filter[this.key] = this.value;
+	Object.assign(opts.filter, this.filters);
 	this.origin.as(ctor, msg, sender, opts);
 };
 
