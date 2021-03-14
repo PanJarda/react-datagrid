@@ -133,8 +133,6 @@ array = apples.as(Array);
 
 setOfApples = apples.as(Set);
 
-/
-
 var apples = new OffsettedCollection(
 	new LimitedCollection(
 		new FilteredCollection(
