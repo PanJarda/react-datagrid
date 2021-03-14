@@ -12,12 +12,16 @@ class Event {
       <tr>
         <th>#</th>
         <th>
-          <span onClick={() => sort('name')}>{ 'Jméno' + (sortedBy === 'name' ? asc ? ' ^' : ' v' : '' ) }</span>
-          <input onChange={ e => filter('name', e.target.value) } />
+          <span onClick={() => sort('name')}>
+            {'Jméno' + (sortedBy === 'name' ? (asc ? ' ^' : ' v') : '')}
+          </span>
+          <input onChange={(e) => filter('name', e.target.value)} />
         </th>
         <th>
-          <span onClick={() => sort('slug')}>{ 'Slug' + (sortedBy === 'slug' ? asc ? ' ^' : ' v' : '' ) }</span>
-          <input onChange={  e => filter('slug', e.target.value) } />
+          <span onClick={() => sort('slug')}>
+            {'Slug' + (sortedBy === 'slug' ? (asc ? ' ^' : ' v') : '')}
+          </span>
+          <input onChange={(e) => filter('slug', e.target.value)} />
         </th>
       </tr>
     );
@@ -26,9 +30,9 @@ class Event {
   renderRow(i) {
     return (
       <tr>
-        <td>{ i }</td>
-        <td>{ this.name }</td>
-        <td>{ this.slug }</td>
+        <td>{i}</td>
+        <td>{this.name}</td>
+        <td>{this.slug}</td>
       </tr>
     );
   }
@@ -42,8 +46,8 @@ class Table extends Component {
   render() {
     return (
       <table>
-        <thead>{ this.props.head }</thead>
-        <tbody>{ this.props.body }</tbody>
+        <thead>{this.props.head}</thead>
+        <tbody>{this.props.body}</tbody>
       </table>
     );
   }
@@ -53,7 +57,9 @@ class App extends Component {
   render() {
     return (
       <Datagrid
-        collection={new RestCollection('https://ventip.infotrh.cz/api/events', Event)}
+        collection={
+          new RestCollection('https://ventip.infotrh.cz/api/events', Event)
+        }
         container={Table}
         button={'button'}
         limit={10}
