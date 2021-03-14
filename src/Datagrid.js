@@ -117,7 +117,7 @@ Datagrid.prototype.filter = function(col, value) {
 Datagrid.prototype.render = function() {
 	var count = this.state.rows.length;
 	return h('div', null,
-		h(this.props.wrap, {
+		h(this.props.container, {
 			head: count ? this.state.rows[0].renderHead(this.state.sortedBy, this.state.asc, this.sort, this.filter) : '',
 			body: !this.state.loading
 				? this.state.rows.map((row, i) => row.renderRow(i + 1 + this.state.offset))

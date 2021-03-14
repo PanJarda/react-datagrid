@@ -30,7 +30,7 @@ class Event {
   }
 }
 
-class Wrap extends Component {
+class Table extends Component {
   constructor(props) {
     super(props);
   }
@@ -52,7 +52,7 @@ class App extends Component {
     return (
       h(Datagrid, {
         collection: new RestCollection('https://ventip.infotrh.cz/api/events', Event),
-        wrap: Wrap,
+        container: Table,
         button: 'button',
         limit: 10
       })
