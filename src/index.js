@@ -8,6 +8,7 @@ function Event(props) {
 
 Event.prototype.renderHead = function(sortedBy, asc, sort, filter) {
 	return h('tr', null,
+		h('th', null, '#'),
 		h('th', null,
 			h('span', {onClick: () => sort('name')}, 'Jméno' + (sortedBy === 'name' ? asc ? ' ^' : ' v' : '' )),
 			h('input', {onChange: e => filter('name', e.target.value)})
@@ -19,10 +20,11 @@ Event.prototype.renderHead = function(sortedBy, asc, sort, filter) {
 	);
 }
 
-Event.prototype.renderRow = function() {
+Event.prototype.renderRow = function(i) {
 	var props = this.props;
 
 	return h('tr', null,
+		h('td', null, i),
 		h('td', null, props.name),
 		h('td', null, props.slug)
 	);

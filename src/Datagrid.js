@@ -120,7 +120,7 @@ Datagrid.prototype.render = function() {
 		h('table', null,
 			h('thead', null, count ? this.state.rows[0].renderHead(this.state.sortedBy, this.state.asc, this.sort, this.filter) : ''),
 			!this.state.loading
-				? h('tbody', null, this.state.rows.map(row => row.renderRow()))
+				? h('tbody', null, this.state.rows.map((row, i) => row.renderRow(i + 1 + this.state.offset)))
 				: 'loading...'
 		),
 		this.state.offset > 0
