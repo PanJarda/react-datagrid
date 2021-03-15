@@ -86,12 +86,15 @@ class Table extends Component {
 }
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.collection =  new RestCollection('https://ventip.infotrh.cz/api/events', Event);
+  }
+  
   render() {
     return (
       <Datagrid
-        collection={
-          new RestCollection('https://ventip.infotrh.cz/api/events', Event)
-        }
+        collection={this.collection}
         container={Table}
         limit={10}
       />
