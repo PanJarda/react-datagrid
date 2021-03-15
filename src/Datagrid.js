@@ -37,8 +37,9 @@ Datagrid.prototype.componentDidMount = function () {
   this.fetchRows(true);
 };
 
-Datagrid.prototype.fetchRows = function (withSize) {
+Datagrid.prototype.fetchRows = function () {
   var state = this.state;
+
   var collection = new SubCollection(
     new FilteredCollection(
       new SortedCollection(
@@ -53,9 +54,6 @@ Datagrid.prototype.fetchRows = function (withSize) {
   );
 
 	collection.as(Array, this.receiveRows, this);
-	if (withSize) {
-		collection.size(this.receiveSize, this);
-	}
 };
 
 Datagrid.prototype.componentDidUpdate = function (prevProps, prevState) {
@@ -87,11 +85,14 @@ Datagrid.prototype.error = function () {
   });
 };
 
-Datagrid.prototype.receiveRows = function (rows) {
+Datagrid.prototype.receiveRows = function (rows, size) {
   this.setState({
     rows: rows,
     loading: false
   });
+	if (size) {
+		this.receiveSize(size);
+	}
 };
 
 Datagrid.prototype.receiveSize = function(size) {

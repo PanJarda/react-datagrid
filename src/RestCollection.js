@@ -1,33 +1,3 @@
-export function AsyncCollection(itemCtor) {
-  this.itemCtor = itemCtor;
-  this.items = [];
-}
-
-AsyncCollection.prototype.add = function (item, success, failure, sender) {
-  // jakym zpusobem se bude serializovat item je na nem a ne na kolekci
-  this.items.push(item.serialize());
-};
-
-AsyncCollection.prototype.delete = function (item, success, failure, sender) {};
-
-AsyncCollection.prototype.as = function (ctor, success, failure, sender, opts) {
-  var proto = Object.create(ctor);
-  // sort filter offset
-  setTimeout(
-    () =>
-      msg.call(
-        sender,
-        ctor.apply(
-          proto,
-          this.items.map((item) => new this.itemCtor(item))
-        )
-      ),
-    0
-  );
-};
-
-AsyncCollection.prototype.size = function (msg, sender, opts) {};
-
 /* Rest Collection */
 
 export function RestCollection(apiUrl, itemCtor) {
@@ -43,9 +13,9 @@ RestCollection.prototype._handleAsResponse = function () {
       var res = JSON.parse(xhr.responseText, xhr).map(
         (item) => new this.itemCtor(item)
       );
-
+			var totalCount = parseInt(xhr.getResponseHeader('x-total-count'));
       var proto = Object.create(xhr.ctor);
-      xhr.msg.call(xhr.sender, xhr.ctor.apply(proto, res));
+      xhr.msg.call(xhr.sender, xhr.ctor.apply(proto, res), totalCount);
     }
     // TODO handle failure
   }
@@ -86,7 +56,11 @@ RestCollection.prototype._get = function(opts) {
     }
 
     if (opts.offset !== undefined) {
-      query.set('offset', opts.offset);
+			if (opts.offset === 0) {
+      	query.set('page', 1);
+			} else {
+				query.set('offset', opts.offset);
+			}
     }
 
     if (opts.page !== undefined) {
