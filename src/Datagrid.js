@@ -16,7 +16,7 @@ function Datagrid(props) {
     rows: [],
     loading: true,
     error: false,
-		pageCount: 0,
+    pageCount: 0,
     offset: 0,
     sortedBy: '',
     asc: true,
@@ -25,7 +25,7 @@ function Datagrid(props) {
 
   this.prev = this.prev.bind(this);
   this.next = this.next.bind(this);
-	this.onPage = this.onPage.bind(this);
+  this.onPage = this.onPage.bind(this);
   this.sort = this.sort.bind(this);
   this.filter = this.filter.bind(this);
 }
@@ -53,7 +53,7 @@ Datagrid.prototype.fetchRows = function () {
     state.offset + this.props.limit
   );
 
-	collection.as(Array, this.receiveRows, this);
+  collection.as(Array, this.receiveRows, this);
 };
 
 Datagrid.prototype.componentDidUpdate = function (prevProps, prevState) {
@@ -65,17 +65,17 @@ Datagrid.prototype.componentDidUpdate = function (prevProps, prevState) {
     this.state.asc !== prevState.asc
   ) {
     this.fetchRows(false);
-		this.setState({
-			error: false,
-			loading: true
-		});
+    this.setState({
+      error: false,
+      loading: true
+    });
   } else if (this.state.filters !== prevState.filters) {
-		this.fetchRows(true);
-		this.setState({
-			error: false,
-			loading: true
-		});
-	}
+    this.fetchRows(true);
+    this.setState({
+      error: false,
+      loading: true
+    });
+  }
 };
 
 Datagrid.prototype.error = function () {
@@ -90,16 +90,16 @@ Datagrid.prototype.receiveRows = function (rows, size) {
     rows: rows,
     loading: false
   });
-	if (size) {
-		this.receiveSize(size);
-	}
+  if (size) {
+    this.receiveSize(size);
+  }
 };
 
-Datagrid.prototype.receiveSize = function(size) {
-	this.setState({
-		pageCount: Math.ceil(size / this.props.limit)
-	});
-}
+Datagrid.prototype.receiveSize = function (size) {
+  this.setState({
+    pageCount: Math.ceil(size / this.props.limit)
+  });
+};
 
 Datagrid.prototype.prev = function () {
   this.setState({
@@ -136,8 +136,8 @@ Datagrid.prototype.filter = function (col, value) {
   }
 };
 
-Datagrid.prototype.onPage = function(page) {
-	this.setState({
+Datagrid.prototype.onPage = function (page) {
+  this.setState({
     offset: this.props.limit * (page - 1)
   });
 };
@@ -148,11 +148,12 @@ Datagrid.prototype.render = function () {
     'div',
     null,
     h(this.props.container, {
-			onPrev: this.prev,
-			onNext: this.next,
-			onPage: this.onPage,
-			pageCount: this.state.pageCount,
-			page: (this.state.offset / this.props.limit) + 1,
+      onPrev: this.prev,
+      onNext: this.next,
+      onPage: this.onPage,
+      limit: this.props.limit,
+      pageCount: this.state.pageCount,
+      page: this.state.offset / this.props.limit + 1,
       head: count
         ? this.state.rows[0].renderHead(
             this.state.sortedBy,
@@ -165,7 +166,8 @@ Datagrid.prototype.render = function () {
         ? this.state.rows.map((row, i) =>
             row.renderRow(i + 1 + this.state.offset)
           )
-        : 'loading...'
+        : '',
+      loading: this.state.loading
     })
   );
 };
