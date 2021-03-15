@@ -34,26 +34,25 @@ Datagrid.prototype = Object.create(Component.prototype);
 Datagrid.prototype.constructor = Datagrid;
 
 Datagrid.prototype.componentDidMount = function () {
-  this.fetchRows(true);
+  this.fetchRows();
 };
 
 Datagrid.prototype.fetchRows = function () {
   var state = this.state;
+	var props = this.props;
 
-  var collection = new SubCollection(
+ 	new SubCollection(
     new FilteredCollection(
       new SortedCollection(
-        this.props.collection,
-        this.state.sortedBy,
-        this.state.asc ? 'ASC' : 'DESC'
+        props.collection,
+      	state.sortedBy,
+        state.asc ? 'ASC' : 'DESC'
       ),
       state.filters
     ),
     state.offset,
-    state.offset + this.props.limit
-  );
-
-  collection.as(Array, this.receiveRows, this);
+    state.offset + props.limit
+  ).as(Array, this.receiveRows, this);
 };
 
 Datagrid.prototype.componentDidUpdate = function (prevProps, prevState) {
@@ -62,15 +61,10 @@ Datagrid.prototype.componentDidUpdate = function (prevProps, prevState) {
     this.props.limit !== prevProps.limit ||
     this.state.offset !== prevState.offset ||
     this.state.sortedBy !== prevState.sortedBy ||
-    this.state.asc !== prevState.asc
+    this.state.asc !== prevState.asc ||
+		this.state.filters !== prevState.filters
   ) {
-    this.fetchRows(false);
-    this.setState({
-      error: false,
-      loading: true
-    });
-  } else if (this.state.filters !== prevState.filters) {
-    this.fetchRows(true);
+    this.fetchRows();
     this.setState({
       error: false,
       loading: true
@@ -126,11 +120,13 @@ Datagrid.prototype.filter = function (col, value) {
     var filter = {};
     filter[col] = value;
     this.setState({
+			offset: 0,
       filters: Object.assign({}, this.state.filters, filter)
     });
   } else {
     delete this.state.filters[col];
     this.setState({
+			offset: 0,
       filters: Object.assign({}, this.state.filters)
     });
   }
