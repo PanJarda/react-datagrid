@@ -39,13 +39,13 @@ Datagrid.prototype.componentDidMount = function () {
 
 Datagrid.prototype.fetchRows = function () {
   var state = this.state;
-	var props = this.props;
+  var props = this.props;
 
- 	new SubCollection(
+  new SubCollection(
     new FilteredCollection(
       new SortedCollection(
         props.collection,
-      	state.sortedBy,
+        state.sortedBy,
         state.asc ? 'ASC' : 'DESC'
       ),
       state.filters
@@ -62,7 +62,7 @@ Datagrid.prototype.componentDidUpdate = function (prevProps, prevState) {
     this.state.offset !== prevState.offset ||
     this.state.sortedBy !== prevState.sortedBy ||
     this.state.asc !== prevState.asc ||
-		this.state.filters !== prevState.filters
+    this.state.filters !== prevState.filters
   ) {
     this.fetchRows();
     this.setState({
@@ -120,13 +120,13 @@ Datagrid.prototype.filter = function (col, value) {
     var filter = {};
     filter[col] = value;
     this.setState({
-			offset: 0,
+      offset: 0,
       filters: Object.assign({}, this.state.filters, filter)
     });
   } else {
     delete this.state.filters[col];
     this.setState({
-			offset: 0,
+      offset: 0,
       filters: Object.assign({}, this.state.filters)
     });
   }

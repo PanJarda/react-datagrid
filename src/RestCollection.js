@@ -7,16 +7,16 @@ export function RestCollection(apiUrl, itemCtor) {
 
 RestCollection.prototype._handleAsResponse = function () {
   var xhr = this;
-	var totalCount;
+  var totalCount;
 
   if (xhr.readyState == 4) {
     if (xhr.status === 0 || (xhr.status >= 200 && xhr.status < 400)) {
       var res = JSON.parse(xhr.responseText, xhr).map(
         (item) => new this.itemCtor(item)
       );
-			if (xhr.opts.offset === 0 || xhr.opts.page === 1) {
-      	totalCount = parseInt(xhr.getResponseHeader('x-total-count'));
-			}
+      if (xhr.opts.offset === 0 || xhr.opts.page === 1) {
+        totalCount = parseInt(xhr.getResponseHeader('x-total-count'));
+      }
       var proto = Object.create(xhr.ctor);
       xhr.msg.call(xhr.sender, xhr.ctor.apply(proto, res), totalCount);
     }
@@ -30,7 +30,7 @@ RestCollection.prototype._handleAddResponse = function () {
 
 RestCollection.prototype._handleSizeResponse = function () {
   var xhr = this;
-	var totalCount;
+  var totalCount;
 
   if (xhr.readyState == 4) {
     if (xhr.status === 0 || (xhr.status >= 200 && xhr.status < 400)) {
@@ -85,7 +85,7 @@ RestCollection.prototype.as = function (ctor, msg, sender, opts) {
   xhr.ctor = ctor;
   xhr.msg = msg;
   xhr.sender = sender;
-	xhr.opts = opts;
+  xhr.opts = opts;
   xhr.onreadystatechange = this._handleAsResponse;
   xhr.send();
 };
