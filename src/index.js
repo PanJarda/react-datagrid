@@ -64,8 +64,8 @@ class Table extends Component {
           <thead>{this.props.head}</thead>
           <tbody>
             {this.props.loading
-              ? new Array(this.props.limit).fill(0).map(() => (
-                  <tr>
+              ? new Array(this.props.limit).fill(0).map((_, i) => (
+                  <tr key={i}>
                     <td>{'\u00A0'}</td>
                   </tr>
                 ))
