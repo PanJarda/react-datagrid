@@ -136,7 +136,6 @@ Datagrid.prototype.filter = function (col, value) {
 };
 
 Datagrid.prototype.onPage = function(page) {
-	console.log(this.props.limit * (page - 1));
 	this.setState({
     offset: this.props.limit * (page - 1)
   });
