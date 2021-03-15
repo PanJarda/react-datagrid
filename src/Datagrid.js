@@ -16,6 +16,7 @@ function Datagrid(props) {
     rows: [],
     loading: true,
     error: false,
+		pageCount: 0,
     offset: 0,
     sortedBy: '',
     asc: true,
@@ -24,6 +25,7 @@ function Datagrid(props) {
 
   this.prev = this.prev.bind(this);
   this.next = this.next.bind(this);
+	this.onPage = this.onPage.bind(this);
   this.sort = this.sort.bind(this);
   this.filter = this.filter.bind(this);
 }
@@ -32,12 +34,12 @@ Datagrid.prototype = Object.create(Component.prototype);
 Datagrid.prototype.constructor = Datagrid;
 
 Datagrid.prototype.componentDidMount = function () {
-  this.fetchRows();
+  this.fetchRows(true);
 };
 
-Datagrid.prototype.fetchRows = function () {
+Datagrid.prototype.fetchRows = function (withSize) {
   var state = this.state;
-  new SubCollection(
+  var collection = new SubCollection(
     new FilteredCollection(
       new SortedCollection(
         this.props.collection,
@@ -48,7 +50,12 @@ Datagrid.prototype.fetchRows = function () {
     ),
     state.offset,
     state.offset + this.props.limit
-  ).as(Array, this.receiveRows, this);
+  );
+
+	collection.as(Array, this.receiveRows, this);
+	if (withSize) {
+		collection.size(this.receiveSize, this);
+	}
 };
 
 Datagrid.prototype.componentDidUpdate = function (prevProps, prevState) {
@@ -56,16 +63,21 @@ Datagrid.prototype.componentDidUpdate = function (prevProps, prevState) {
     this.props.collection !== prevProps.collection ||
     this.props.limit !== prevProps.limit ||
     this.state.offset !== prevState.offset ||
-    this.state.filters !== prevState.filters ||
     this.state.sortedBy !== prevState.sortedBy ||
     this.state.asc !== prevState.asc
   ) {
-    this.fetchRows();
-    this.setState({
-      error: false,
-      loading: true
-    });
-  }
+    this.fetchRows(false);
+		this.setState({
+			error: false,
+			loading: true
+		});
+  } else if (this.state.filters !== prevState.filters) {
+		this.fetchRows(true);
+		this.setState({
+			error: false,
+			loading: true
+		});
+	}
 };
 
 Datagrid.prototype.error = function () {
@@ -81,6 +93,12 @@ Datagrid.prototype.receiveRows = function (rows) {
     loading: false
   });
 };
+
+Datagrid.prototype.receiveSize = function(size) {
+	this.setState({
+		pageCount: Math.ceil(size / this.props.limit)
+	});
+}
 
 Datagrid.prototype.prev = function () {
   this.setState({
@@ -117,12 +135,24 @@ Datagrid.prototype.filter = function (col, value) {
   }
 };
 
+Datagrid.prototype.onPage = function(page) {
+	console.log(this.props.limit * (page - 1));
+	this.setState({
+    offset: this.props.limit * (page - 1)
+  });
+};
+
 Datagrid.prototype.render = function () {
   var count = this.state.rows.length;
   return h(
     'div',
     null,
     h(this.props.container, {
+			onPrev: this.prev,
+			onNext: this.next,
+			onPage: this.onPage,
+			pageCount: this.state.pageCount,
+			page: (this.state.offset / this.props.limit) + 1,
       head: count
         ? this.state.rows[0].renderHead(
             this.state.sortedBy,
@@ -136,11 +166,7 @@ Datagrid.prototype.render = function () {
             row.renderRow(i + 1 + this.state.offset)
           )
         : 'loading...'
-    }),
-    this.state.offset > 0
-      ? h(this.props.button, { onClick: this.prev }, 'prev')
-      : '',
-    h(this.props.button, { onClick: this.next }, 'next')
+    })
   );
 };
 

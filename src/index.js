@@ -45,10 +45,30 @@ class Table extends Component {
 
   render() {
     return (
-      <table>
-        <thead>{this.props.head}</thead>
-        <tbody>{this.props.body}</tbody>
-      </table>
+      <div>
+        <table>
+          <thead>{this.props.head}</thead>
+          <tbody>{this.props.body}</tbody>
+        </table>
+        <div>
+          {
+            this.props.page > 1
+            ? <button onClick={this.props.onPrev}>Prev</button>
+            : ''
+          }
+          {
+            (new Array(this.props.pageCount)).fill(1).map((_, i) =>
+              this.props.page === (i + 1)
+                ? <span style={{textDecoration: 'underline'}}>{ i + 1 }</span>
+                : <button onClick={() => this.props.onPage(i + 1)}>{ i + 1 }</button>)
+          }
+          {
+            this.props.page < this.props.pageCount
+            ? <button onClick={this.props.onNext}>Next</button>
+            : ''
+          }
+        </div>
+      </div>
     );
   }
 }
@@ -61,7 +81,6 @@ class App extends Component {
           new RestCollection('https://ventip.infotrh.cz/api/events', Event)
         }
         container={Table}
-        button={'button'}
         limit={10}
       />
     );
