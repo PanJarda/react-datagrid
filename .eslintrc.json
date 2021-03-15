@@ -2,6 +2,8 @@
   "root": true,
   "extends": [
     "eslint:recommended",
+    "plugin:compat/recommended",
+    "plugin:react/recommended",
     "prettier"
   ],
   "settings": {
@@ -11,10 +13,14 @@
   },
   "parserOptions": {
     "ecmaVersion": 2015,
+    "jsx": true,
     "sourceType": "module"
   },
   "env": {
     "browser": true,
     "node": true
+  },
+  "rules": {
+    "react/prop-types": "off"
   }
 }
