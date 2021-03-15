@@ -23,6 +23,16 @@ class Event {
           </span>
           <input onChange={(e) => filter('slug', e.target.value)} />
         </th>
+        <th>
+          <span onClick={() => sort('description')}>
+            {'Popis' + (sortedBy === 'description' ? (asc ? ' ^' : ' v') : '')}
+          </span>
+        </th>
+        <th>
+          <span onClick={() => sort('city')}>
+            {'Adresa' + (sortedBy === 'city' ? (asc ? ' ^' : ' v') : '')}
+          </span>
+        </th>
       </tr>
     );
   }
@@ -33,6 +43,8 @@ class Event {
         <td>{i}</td>
         <td>{this.name}</td>
         <td>{this.slug}</td>
+        <td>{this.description}</td>
+        <td>{this.address.street}, {this.address.city && this.address.city.name}</td>
       </tr>
     );
   }
