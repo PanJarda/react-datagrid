@@ -1,9 +1,4 @@
 import { h, Component } from 'preact';
-import {
-  FilteredCollection,
-  SortedCollection,
-  SubCollection
-} from './RestCollection';
 
 /**
  * @constructor
@@ -41,18 +36,11 @@ Datagrid.prototype.fetchRows = function () {
   var state = this.state;
   var props = this.props;
 
-  new SubCollection(
-    new FilteredCollection(
-      new SortedCollection(
-        props.collection,
-        state.sortedBy,
-        state.asc ? 'ASC' : 'DESC'
-      ),
-      state.filters
-    ),
-    state.offset,
-    state.offset + props.limit
-  ).as(Array, this.receiveRows, this);
+  props.collection
+    .sort(state.sortedBy, state.asc)
+    .filter(state.filters)
+    .inRange(state.offset, state.offset + props.limit)
+    .as(Array, this.receiveRows, this);
 };
 
 Datagrid.prototype.componentDidUpdate = function (prevProps, prevState) {

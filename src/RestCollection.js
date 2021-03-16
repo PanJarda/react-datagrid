@@ -102,6 +102,20 @@ RestCollection.prototype.size = function (msg, sender, opts) {
   xhr.send();
 };
 
+RestCollection.prototype.sort = function(column, asc) {
+  return new SortedCollection(this, column, asc);
+};
+
+RestCollection.prototype.filter = function(filters) {
+  return new FilteredCollection(this, filters);
+};
+
+RestCollection.prototype.inRange = function(start, end) {
+  return new SubCollection(this, start, end);
+};
+
+
+
 export function SortedCollection(origin, key, order) {
   this.origin = origin;
   this.key = key;
@@ -121,6 +135,15 @@ SortedCollection.prototype.as = function (ctor, msg, sender, opts) {
 SortedCollection.prototype.size = function (msg, sender, opts) {
   this.origin.size(msg, sender, opts);
 };
+
+SortedCollection.prototype.filter = function(filters) {
+  return new FilteredCollection(this.origin, filters);
+};
+
+SortedCollection.prototype.inRange = function(start, end) {
+  return new SubCollection(this.origin, start, end);
+};
+
 
 export function FilteredCollection(origin, filters) {
   this.origin = origin;
@@ -146,6 +169,17 @@ FilteredCollection.prototype.size = function (msg, sender, opts) {
   this.origin.size(msg, sender, this._prepareOpts(opts));
 };
 
+//TODO add multiple sorts
+FilteredCollection.prototype.sort = function(column, asc) {
+  return new SortedCollection(this.origin, column, asc);
+};
+
+FilteredCollection.prototype.inRange = function(start, end) {
+  return new SubCollection(this.origin, start, end);
+}
+
+
+
 export function SubCollection(origin, start, end) {
   this.origin = origin;
   this.start = start || 0;
@@ -169,6 +203,14 @@ SubCollection.prototype.as = function (ctor, msg, sender, opts) {
 
 SubCollection.prototype.size = function (msg, sender, opts) {
   this.origin.size(msg, sender, this._prepareOpts(opts));
+};
+
+SubCollection.prototype.filter = function(filters) {
+  return new FilteredCollection(this.origin, filters);
+};
+
+SubCollection.prototype.sort = function(column, asc) {
+  return new SortedCollection(this.origin, column, asc);
 };
 
 /*
