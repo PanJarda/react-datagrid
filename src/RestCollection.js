@@ -41,7 +41,7 @@ RestCollection.prototype._handleSizeResponse = function () {
   }
 };
 
-RestCollection.prototype.add = function (props, msg, sender) {
+RestCollection.prototype.add = function () {
   // xhr.send(props);
 };
 
@@ -102,19 +102,17 @@ RestCollection.prototype.size = function (msg, sender, opts) {
   xhr.send();
 };
 
-RestCollection.prototype.sort = function(column, asc) {
+RestCollection.prototype.sort = function (column, asc) {
   return new SortedCollection(this, column, asc);
 };
 
-RestCollection.prototype.filter = function(filters) {
+RestCollection.prototype.filter = function (filters) {
   return new FilteredCollection(this, filters);
 };
 
-RestCollection.prototype.inRange = function(start, end) {
+RestCollection.prototype.inRange = function (start, end) {
   return new SubCollection(this, start, end);
 };
-
-
 
 export function SortedCollection(origin, key, order) {
   this.origin = origin;
@@ -127,7 +125,7 @@ SortedCollection.prototype.add = function (props, msg, sender) {
 };
 
 SortedCollection.prototype.as = function (ctor, msg, sender, opts) {
-  var opts = opts || {};
+  opts = opts || {};
   opts.order = this.key;
   this.origin.as(ctor, msg, sender, opts);
 };
@@ -136,14 +134,13 @@ SortedCollection.prototype.size = function (msg, sender, opts) {
   this.origin.size(msg, sender, opts);
 };
 
-SortedCollection.prototype.filter = function(filters) {
+SortedCollection.prototype.filter = function (filters) {
   return new FilteredCollection(this.origin, filters);
 };
 
-SortedCollection.prototype.inRange = function(start, end) {
+SortedCollection.prototype.inRange = function (start, end) {
   return new SubCollection(this.origin, start, end);
 };
-
 
 export function FilteredCollection(origin, filters) {
   this.origin = origin;
@@ -151,7 +148,7 @@ export function FilteredCollection(origin, filters) {
 }
 
 FilteredCollection.prototype._prepareOpts = function (opts) {
-  var opts = opts || {};
+  opts = opts || {};
   opts.filter = opts.filter || {};
   Object.assign(opts.filter, this.filters);
   return opts;
@@ -170,15 +167,13 @@ FilteredCollection.prototype.size = function (msg, sender, opts) {
 };
 
 //TODO add multiple sorts
-FilteredCollection.prototype.sort = function(column, asc) {
+FilteredCollection.prototype.sort = function (column, asc) {
   return new SortedCollection(this.origin, column, asc);
 };
 
-FilteredCollection.prototype.inRange = function(start, end) {
+FilteredCollection.prototype.inRange = function (start, end) {
   return new SubCollection(this.origin, start, end);
-}
-
-
+};
 
 export function SubCollection(origin, start, end) {
   this.origin = origin;
@@ -187,7 +182,7 @@ export function SubCollection(origin, start, end) {
 }
 
 SubCollection.prototype._prepareOpts = function (opts) {
-  var opts = opts || {};
+  opts = opts || {};
   opts.offset = this.start;
   opts.limit = this.end - this.start;
   return opts;
@@ -205,11 +200,11 @@ SubCollection.prototype.size = function (msg, sender, opts) {
   this.origin.size(msg, sender, this._prepareOpts(opts));
 };
 
-SubCollection.prototype.filter = function(filters) {
+SubCollection.prototype.filter = function (filters) {
   return new FilteredCollection(this.origin, filters);
 };
 
-SubCollection.prototype.sort = function(column, asc) {
+SubCollection.prototype.sort = function (column, asc) {
   return new SortedCollection(this.origin, column, asc);
 };
 
