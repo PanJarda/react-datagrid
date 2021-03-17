@@ -48,35 +48,35 @@ RestCollection.prototype.add = function () {
 RestCollection.prototype._get = function (opts) {
   var xhr = new XMLHttpRequest();
   xhr.itemCtor = this.itemCtor;
-  var query = new URLSearchParams();
+  var query = [];
   if (opts) {
     if (opts.filter) {
       var filter = opts.filter;
-      Object.keys(filter).map((key) => query.append(key, filter[key]));
+      Object.keys(filter).map((key) => query.push(key + '=' + filter[key]));
     }
 
     if (opts.limit !== undefined) {
-      query.set('l', opts.limit);
+      query.push('l=' + opts.limit.toString());
     }
 
     if (opts.offset !== undefined) {
       if (opts.offset === 0) {
-        query.set('page', 1);
+        query.push('page=1');
       } else {
-        query.set('offset', opts.offset);
+        query.push('offset=' + opts.offset.toString());
       }
     }
 
     if (opts.page !== undefined) {
-      query.set('page', opts.page);
+      query.push('page=' + opts.page.toString());
     }
 
     if (opts.order) {
-      query.set('order', opts.order);
+      query.push('order=' + opts.order.toString());
     }
   }
 
-  xhr.open('GET', this.apiUrl + '?' + query.toString(), true);
+  xhr.open('GET', this.apiUrl + '?' + query.join('&'), true);
   return xhr;
 };
 
@@ -207,27 +207,3 @@ SubCollection.prototype.filter = function (filters) {
 SubCollection.prototype.sort = function (column, asc) {
   return new SortedCollection(this.origin, column, asc);
 };
-
-/*
-var apples = new SubCollection(
-	new SortedCollection(
-		new FilteredCollection(
-			new AsyncCollection(RestApple),
-			'color',
-			'red'
-		),
-		'size'
-	),
-	0,
-	10
-);
-
-apples.as(Array, console.log, console);
-
-
-apples.filter('color', 'red')
-	.filter('size[gte]', 5)
-	.sort('size', 'asc')
-	.as(Array, console.log, console);
-
-apples.size(console.log, console);*/
