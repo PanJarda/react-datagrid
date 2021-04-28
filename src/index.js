@@ -2,7 +2,7 @@ import { h, Component } from 'preact';
 import Datagrid from './Datagrid';
 import { RestCollection } from './RestCollection';
 
-class Event {
+class DatagridEvent {
   constructor(props) {
     Object.assign(this, props);
   }
@@ -105,7 +105,7 @@ class App extends Component {
     super(props);
     this.collection = new RestCollection(
       'https://ventip.infotrh.cz/api/events',
-      Event
+      DatagridEvent
     );
   }
 
